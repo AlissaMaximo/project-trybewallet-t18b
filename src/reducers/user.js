@@ -1,5 +1,5 @@
 // Esse reducer será responsável por tratar as informações da pessoa usuária
-import { palavra } from '../actions';
+import { ADD_EMAIL } from '../actions';
 
 export const INITIAL_STATE = {
   user: {
@@ -7,11 +7,13 @@ export const INITIAL_STATE = {
   },
 };
 
-export const user = (state = INITIAL_STATE, action) => {
+const user = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-  case palavra:
-    return { ...state, palavrinha: `${palavrinha}s` };
+  case ADD_EMAIL:
+    return { ...state, email: action.payload };
   default:
     return state;
   }
 };
+
+export default user;

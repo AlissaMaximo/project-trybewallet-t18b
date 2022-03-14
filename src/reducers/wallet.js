@@ -8,7 +8,7 @@ export const INITIAL_STATE = {
   },
 };
 
-export const user = (state = INITIAL_STATE, action) => {
+const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case palavra2:
     return { ...state };
@@ -16,3 +16,5 @@ export const user = (state = INITIAL_STATE, action) => {
     return state;
   }
 };
+
+export default wallet;

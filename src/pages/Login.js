@@ -1,4 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
+import { addEmail } from '../actions';
 
 class Login extends React.Component {
   state = {
@@ -15,7 +18,7 @@ class Login extends React.Component {
       isDisabled: true,
     });
 
-    if (this.verifyEmail(email) && password.length >= minPasswordLength) {
+    if (this.checkEmail(email) && password.length >= minPasswordLength) {
       this.setState({
         isDisabled: false,
       });
@@ -28,12 +31,10 @@ class Login extends React.Component {
     }, this.toggleButton);
   }
 
-  verifyEmail = (email) => {
-    (String(email).toLowerCase().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/));
-  };
+  checkEmail = (email) => String(email).toLowerCase().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
   render() {
-    const { isDisabled } = this.state;
+    const { isDisabled, email } = this.state;
 
     return (
       <form>
@@ -57,10 +58,36 @@ class Login extends React.Component {
             onChange={ this.handleInputChange }
           />
         </label>
-        <button type="submit" disabled={ isDisabled }>Entrar</button>
+        <button
+          type="button"
+          disabled={ isDisabled }
+          onClick={ () => {
+            const { history, addUserEmail } = this.props;
+            addUserEmail(email);
+            history.push('/carteira');
+          } }
+        >
+          Entrar
+
+        </button>
       </form>
     );
   }
 }
 
-export default Login;
+Login.propTypes = {
+  addUserEmail: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
+
+const mapStateToProps = () => ({
+
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addUserEmail: (email) => dispatch(addEmail(email)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
