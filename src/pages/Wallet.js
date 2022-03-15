@@ -8,8 +8,19 @@ class Wallet extends React.Component {
     value: 0,
     desc: '',
     currency: 'valor-temporario',
-    'payment-method': 'cash',
+    method: 'cash',
     tag: 'food',
+    currencies: [],
+  }
+
+  componentDidMount = async () => {
+    const currencies = await fetch('https://economia.awesomeapi.com.br/json/all').then((response) => response.json());
+
+    delete currencies.USDT;
+
+    const organizedCurrencies = Object.entries(currencies);
+    console.log(organizedCurrencies); // array grnd c vários pqns
+    this.setState({ currencies: organizedCurrencies });
   }
 
   handleFormChange = ({ target: { name, value } }) => {
@@ -18,11 +29,14 @@ class Wallet extends React.Component {
 
   handleButtonAddExpense = () => {
     const { addMyExpense } = this.props;
-    addMyExpense(this.state);
+    const { value, desc, currency, method, tag } = this.state;
+    addMyExpense({ value, desc, currency, method, tag });
   }
 
   render() {
     const { email } = this.props;
+    const { currencies } = this.state;
+
     return (
       <>
         <header>
@@ -64,6 +78,18 @@ class Wallet extends React.Component {
               onChange={ this.handleFormChange }
             >
               <option value="valor-temporario">opção temporária</option>
+              { currencies.length !== 0
+                && (currencies.forEach((currencyArr) => {
+                  const currencyAcronym = currencyArr[0];
+                  return (
+                    <option
+                      data-testid={ currencyAcronym }
+                      value={ currencyAcronym }
+                    >
+                      {currencyAcronym}
+                    </option>
+                  );
+                }))}
             </select>
           </label>
           <label htmlFor="select-currency">
@@ -71,7 +97,7 @@ class Wallet extends React.Component {
             <select
               data-testid="method-input"
               id="select-payment-method"
-              name="payment-method"
+              name="method"
               onChange={ this.handleFormChange }
             >
               <option value="cash">Dinheiro</option>
@@ -117,7 +143,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addMyExpense: (email) => dispatch(addExpense(email)),
+  addMyExpense: (expense) => dispatch(addExpense(expense)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);

@@ -7,7 +7,14 @@ export const addEmail = (email) => ({
   payload: email,
 });
 
-export const addExpense = (expense) => ({
-  type: ADD_EXPENSE,
-  payload: expense,
-});
+export const addExpense = (expense) => async (dispatch) => {
+  const APIdata = await fetch('https://economia.awesomeapi.com.br/json/all')
+    .then((response) => response.json())
+    .then((data) => data);
+
+  dispatch({
+    type: ADD_EXPENSE,
+    payloadExpense: expense,
+    payloadData: APIdata,
+  });
+};

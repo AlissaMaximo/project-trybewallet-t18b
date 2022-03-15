@@ -11,7 +11,8 @@ export const INITIAL_STATE = {
 const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case ADD_EXPENSE:
-    return { expenses: [action.payload] };
+    console.log(`${action.payloadExpense} ${action.payloadData}`);
+    return state;
   default:
     return state;
   }
