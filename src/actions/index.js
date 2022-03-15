@@ -12,9 +12,10 @@ export const addExpense = (expense) => async (dispatch) => {
     .then((response) => response.json())
     .then((data) => data);
 
+  expense.exchangeRates = APIdata;
+
   dispatch({
     type: ADD_EXPENSE,
-    payloadExpense: expense,
-    payloadData: APIdata,
+    expense,
   });
 };

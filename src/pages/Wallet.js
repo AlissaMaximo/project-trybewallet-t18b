@@ -10,6 +10,7 @@ class Wallet extends React.Component {
     currency: 'valor-temporario',
     method: 'cash',
     tag: 'food',
+    id: 0,
     currencies: [],
   }
 
@@ -28,8 +29,8 @@ class Wallet extends React.Component {
 
   handleButtonAddExpense = () => {
     const { addMyExpense } = this.props;
-    const { value, desc, currency, method, tag } = this.state;
-    addMyExpense({ value, desc, currency, method, tag });
+    const { value, desc, currency, method, tag, id } = this.state;
+    addMyExpense({ value, desc, currency, method, tag, id });
   }
 
   showOptions = () => {
@@ -52,7 +53,7 @@ class Wallet extends React.Component {
 
   render() {
     const { email } = this.props;
-    const { currencies } = this.state;
+    const { currencies, id } = this.state;
 
     return (
       <>
@@ -126,10 +127,31 @@ class Wallet extends React.Component {
               <option value="health">Saúde</option>
             </select>
           </label>
-          <button type="button" onClick={ this.handleButtonAddExpense }>
+          <button
+            type="button"
+            onClick={ () => {
+              this.setState({ id: id + 1 });
+              this.handleButtonAddExpense();
+            } }
+          >
             Adicionar despesa
           </button>
         </form>
+        <table>
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Tag</th>
+              <th>Método de pagamento</th>
+              <th>Valor</th>
+              <th>Moeda</th>
+              <th>Câmbio utilizado</th>
+              <th>Valor convertido</th>
+              <th>Moeda de conversão</th>
+              <th>Editar/Excluir</th>
+            </tr>
+          </thead>
+        </table>
       </>
     );
   }
