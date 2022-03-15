@@ -33,6 +33,24 @@ class Wallet extends React.Component {
     addMyExpense({ value, desc, currency, method, tag });
   }
 
+  showOptions = () => {
+    const { currencies } = this.state;
+    const options = [];
+    currencies.forEach((currencyArr) => {
+      const currencyAcronym = currencyArr[0];
+      options.push((
+        <option
+          data-testid={ currencyAcronym }
+          key={ currencyAcronym }
+          value={ currencyAcronym }
+        >
+          {currencyAcronym}
+        </option>
+      ));
+    });
+    return options;
+  }
+
   render() {
     const { email } = this.props;
     const { currencies } = this.state;
@@ -77,19 +95,8 @@ class Wallet extends React.Component {
               name="currency"
               onChange={ this.handleFormChange }
             >
-              <option value="valor-temporario">opção temporária</option>
               { currencies.length !== 0
-                && (currencies.forEach((currencyArr) => {
-                  const currencyAcronym = currencyArr[0];
-                  return (
-                    <option
-                      data-testid={ currencyAcronym }
-                      value={ currencyAcronym }
-                    >
-                      {currencyAcronym}
-                    </option>
-                  );
-                }))}
+                && this.showOptions()}
             </select>
           </label>
           <label htmlFor="select-currency">
