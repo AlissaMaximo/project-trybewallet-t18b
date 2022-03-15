@@ -19,7 +19,6 @@ class Wallet extends React.Component {
     delete currencies.USDT;
 
     const organizedCurrencies = Object.entries(currencies);
-    console.log(organizedCurrencies); // array grnd c vários pqns
     this.setState({ currencies: organizedCurrencies });
   }
 
