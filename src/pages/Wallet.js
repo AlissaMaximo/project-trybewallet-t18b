@@ -8,8 +8,8 @@ class Wallet extends React.Component {
     value: 0,
     description: '',
     currency: 'USD',
-    method: 'cash',
-    tag: 'food',
+    method: 'Dinheiro',
+    tag: 'Alimentação',
     id: 0,
     currencies: [],
   }
@@ -159,21 +159,30 @@ class Wallet extends React.Component {
               <th>Editar/Excluir</th>
             </tr>
           </thead>
-          {
-            console.log(expenses)
-          /* <tbody>
-            <tr>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </tbody> */}
+          <tbody>
+            {
+              expenses.map((expense) => (
+                <tr key={ expense.id }>
+                  <td>{expense.description}</td>
+                  <td>{expense.tag}</td>
+                  <td>{expense.method}</td>
+                  <td>{Number.parseFloat(expense.value).toFixed(2)}</td>
+                  <td>{expense.exchangeRates[expense.currency].name}</td>
+                  <td>
+                    {Number
+                      .parseFloat(expense.exchangeRates[expense.currency].ask).toFixed(2)}
+                  </td>
+                  <td>
+                    {Number.parseFloat(expense.value * expense
+                      .exchangeRates[expense.currency].ask).toFixed(2)}
+                  </td>
+                  <td>Real</td>
+                  <td><button type="button">Editar/Excluir</button></td>
+                </tr>
+              ))
+            }
+
+          </tbody>
         </table>
       </>
     );
