@@ -2,16 +2,14 @@
 import { ADD_EXPENSE } from '../actions';
 
 export const INITIAL_STATE = {
-  wallet: {
-    currencies: [],
-    expenses: [],
-  },
+  currencies: [],
+  expenses: [],
 };
 
 const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case ADD_EXPENSE:
-    return { expenses: [...state.wallet.expenses, { ...action.expense }] };
+    return { ...state, expenses: [...state.expenses, { ...action.expense }] };
   default:
     return state;
   }
