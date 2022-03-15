@@ -1,8 +1,26 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import { addExpense } from '../actions';
 
 class Wallet extends React.Component {
+  state = {
+    value: 0,
+    desc: '',
+    currency: 'valor-temporario',
+    'payment-method': 'cash',
+    tag: 'food',
+  }
+
+  handleFormChange = ({ target: { name, value } }) => {
+    this.setState({ [name]: value });
+  }
+
+  handleButtonAddExpense = () => {
+    const { addMyExpense } = this.props;
+    addMyExpense(this.state);
+  }
+
   render() {
     const { email } = this.props;
     return (
@@ -20,24 +38,31 @@ class Wallet extends React.Component {
           <label htmlFor="input-value">
             Valor
             <input
-              type="number"
+              data-testid="value-input"
               id="input-value"
               name="value"
-              data-testid="value-input"
+              type="number"
+              onChange={ this.handleFormChange }
             />
           </label>
           <label htmlFor="input-desc">
             Descrição
             <input
-              type="text"
+              data-testid="description-input"
               id="input-desc"
               name="desc"
-              data-testid="description-input"
+              type="text"
+              onChange={ this.handleFormChange }
             />
           </label>
           <label htmlFor="select-currency">
             Moeda
-            <select data-testid="currency-input" name="currency" id="select-currency">
+            <select
+              data-testid="currency-input"
+              id="select-currency"
+              name="currency"
+              onChange={ this.handleFormChange }
+            >
               <option value="valor-temporario">opção temporária</option>
             </select>
           </label>
@@ -45,20 +70,22 @@ class Wallet extends React.Component {
             Método de pagamento
             <select
               data-testid="method-input"
-              name="payment-method"
               id="select-payment-method"
+              name="payment-method"
+              onChange={ this.handleFormChange }
             >
               <option value="cash">Dinheiro</option>
               <option value="credit-card">Cartão de crédito</option>
-              <option value="debitCard">Cartão de débito</option>
+              <option value="debit-card">Cartão de débito</option>
             </select>
           </label>
           <label htmlFor="select-currency">
             Categoria
             <select
               data-testid="tag-input"
-              name="tag"
               id="select-tag"
+              name="tag"
+              onChange={ this.handleFormChange }
             >
               <option value="food">Alimentação</option>
               <option value="leisure">Lazer</option>
@@ -67,6 +94,9 @@ class Wallet extends React.Component {
               <option value="health">Saúde</option>
             </select>
           </label>
+          <button type="button" onClick={ this.handleButtonAddExpense }>
+            Adicionar despesa
+          </button>
         </form>
       </>
     );
@@ -74,6 +104,7 @@ class Wallet extends React.Component {
 }
 
 Wallet.propTypes = {
+  addMyExpense: PropTypes.func.isRequired,
   email: PropTypes.string,
 };
 
@@ -85,4 +116,8 @@ const mapStateToProps = (state) => ({
   email: state.user.email,
 });
 
-export default connect(mapStateToProps, null)(Wallet);
+const mapDispatchToProps = (dispatch) => ({
+  addMyExpense: (email) => dispatch(addExpense(email)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
